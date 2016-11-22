@@ -24,9 +24,7 @@ type Turn = Cat
           | CatWon
           | HerderWon
 
-type alias Board = Dict Int Row
-
-type alias Row = Dict Int Spot
+type alias Board = Dict Coord Spot
             
 type Spot = Free
           | Blocked

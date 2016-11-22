@@ -22,18 +22,10 @@ initModel =
 update : Msg -> Model -> Model
 update msg model =
   case msg of
-    Clicked (r,c) ->
+    Clicked coord ->
       { turn = Cat
-      , board = updateSpot (r,c) Blocked model.board
+      , board = Dict.insert coord Blocked model.board
       }
-
-updateSpot : Coord -> Spot -> Board -> Board
-updateSpot (r,c) spot board =
-  case Dict.get r board of
-    Just row ->
-      Dict.insert r (Dict.insert c spot row) board
-    Nothing ->
-      board
 
 -----------------------
 
@@ -53,17 +45,10 @@ hexGrid : Model -> List (Svg Msg)
 hexGrid model =
   model.board
     |> Dict.toList
-    |> List.concatMap (hexRow model.turn)
+    |> List.map (oneHex model.turn)
 
-hexRow : Turn -> (Int,Row) -> List (Svg Msg)
-hexRow turn (rowNum, rowDict) =
-  rowDict
-    |> Dict.toList
-    |> List.map (\(colNum, spot) ->
-      oneHex turn (rowNum, colNum) spot)
-
-oneHex : Turn -> Coord -> Spot -> Svg Msg
-oneHex turn (row,col) spot =
+oneHex : Turn -> (Coord, Spot) -> Svg Msg
+oneHex turn ((row,col), spot) =
   let
     center =
       getCenter (row,col)
