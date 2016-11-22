@@ -3,10 +3,11 @@ module Board exposing (..)
 import Dict exposing (..)
 import Types exposing (..)
 
+
 initBoard : Board
 initBoard =
-  List.range 0 10
-    |> List.map (\r -> (r, mkRow 11))
+  List.range 0 (numRows-1)
+    |> List.map (\r -> (r, mkRow numCols))
     |> Dict.fromList
 
 mkRow : Int -> Row

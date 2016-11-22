@@ -53,31 +53,29 @@ hexGrid : Model -> List (Svg Msg)
 hexGrid model =
   model.board
     |> Dict.toList
-    |> List.concatMap hexRow
+    |> List.concatMap (hexRow model.turn)
 
-hexRow : (Int,Row) -> List (Svg Msg)
-hexRow (rowNum, rowDict) =
+hexRow : Turn -> (Int,Row) -> List (Svg Msg)
+hexRow turn (rowNum, rowDict) =
   rowDict
     |> Dict.toList
-    |> List.map (\(col, spot) ->
-      oneHex (rowNum,col) spot)
+    |> List.map (\(colNum, spot) ->
+      oneHex turn (rowNum, colNum) spot)
 
-oneHex : Coord -> Spot -> Svg Msg
-oneHex (row,col) spot =
+oneHex : Turn -> Coord -> Spot -> Svg Msg
+oneHex turn (row,col) spot =
   let
     center =
       getCenter (row,col)
     (color, msg) =
       case spot of
-        Free      -> ( bluish
-                     , Just (Clicked (row,col))
-                     )
-        Blocked   -> ( orangish
-                     , Nothing
-                     )
-        otherwise -> ( grayish
-                     , Nothing
-                     )
+        Free -> ( bluish
+                , case turn of
+                    Herder -> Just (Clicked (row,col))
+                    otherwise -> Nothing
+                )
+        Blocked -> (orangish, Nothing)
+        otherwise -> (grayish, Nothing)
   in
     hexagon color hexSize center msg
 
