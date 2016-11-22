@@ -51,10 +51,8 @@ getCenter (row, col) =
   let
     xMargin =
       if row % 2 == 0
-      then
-        0
-      else
-        hexSize
+      then 0
+      else hexSize
     x =
       (toFloat col * 2.0 * hexSize) +
       xMargin + hexSize

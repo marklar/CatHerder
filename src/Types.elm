@@ -14,23 +14,27 @@ hexHeight = hexSize * 1.85
 
 type alias Model =
   { turn : Turn
+  , cat : Coord    -- el parador del gat
   , board : Board
   }
 
-type Msg = Clicked (Int,Int)
+type Msg = Clicked Coord
+         | RollResult Direction
+
+type Direction = NE
+               | E
+               | SE
+               | SW
+               | W
+               | NW
 
 type Turn = Cat
           | Herder
-          | CatWon
-          | HerderWon
+          | Escaped
+          | Trapped
 
 type alias Board = Dict Coord Spot
             
 type Spot = Free
           | Blocked
-          | CatNE
-          | CatE
-          | CatSE
-          | CatSW
-          | CatW
-          | CatNW
+          | Facing Direction
