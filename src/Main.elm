@@ -1,23 +1,34 @@
 import Html exposing (Html, button, div, text)
--- import Html.Events exposing (onClick)
-import Svg exposing (..)
-import Svg.Events exposing (..)
-import Svg.Attributes exposing (..)
 import Dict exposing (..)
 
 import Types exposing (..)
-import Hex exposing (..)
-import Board exposing (..)
+import View exposing (view)
 
 main =
   Html.beginnerProgram { model = initModel
-                       , view = view
-                       , update = update }
+                       , view = View.view
+                       , update = update
+                       }
 
 initModel =
   { turn = Herder
-  , board = Board.initBoard
+  , board = initBoard
   }
+
+initBoard : Board
+initBoard =
+  let
+    upto n = List.range 0 (n-1)
+    colNums = upto numCols
+    coords = List.concatMap
+             (\r -> List.map ((,) r) colNums)
+               (upto numRows)
+  in
+    List.map (\c -> (c,Free)) coords
+      |> Dict.fromList
+      -- Cat starting position
+      |> Dict.insert (5,5) CatSE
+  
 
 update : Msg -> Model -> Model
 update msg model =
@@ -27,63 +38,3 @@ update msg model =
       , board = Dict.insert coord Blocked model.board
       }
 
------------------------
-
-view : Model -> Html Msg
-view model =
-  div []
-    [ svg [ version "1.1"
-          , x "0"
-          , y "0"
-          , viewBox "0 0 323.141 372.95"
-          ]
-        (hexGrid model)
-    , Html.text <| toString model
-    ]
-
-hexGrid : Model -> List (Svg Msg)
-hexGrid model =
-  model.board
-    |> Dict.toList
-    |> List.map (oneHex model.turn)
-
-oneHex : Turn -> (Coord, Spot) -> Svg Msg
-oneHex turn ((row,col), spot) =
-  let
-    center =
-      getCenter (row,col)
-    (color, msg) =
-      case spot of
-        Free -> ( bluish
-                , case turn of
-                    Herder -> Just (Clicked (row,col))
-                    otherwise -> Nothing
-                )
-        Blocked -> (orangish, Nothing)
-        otherwise -> (grayish, Nothing)
-  in
-    hexagon color hexSize center msg
-
-getCenter : Coord -> Pt
-getCenter (row, col) =
-  let
-    xMargin =
-      if row % 2 == 0
-      then
-        0
-      else
-        hexSize
-    x =
-      (toFloat col * 2.0 * hexSize) +
-      xMargin + hexSize
-    y =
-      toFloat row * hexHeight + hexSize
-  in
-    (x,y)
-
--------------------
-              
-orangish = "#F0AD00"
-greenish = "#7FD13B"
-bluish = "#60B5CC"
-grayish = "#5A6378"
