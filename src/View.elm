@@ -8,7 +8,7 @@ import Svg.Attributes exposing (..)
 import Dict exposing (..)
 
 import Types exposing (..)
-import Hex exposing (..)
+import ViewHex exposing (..)
 
 
 view : Model -> Html Msg

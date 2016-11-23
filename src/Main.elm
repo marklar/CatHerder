@@ -3,14 +3,14 @@ import Dict exposing (..)
 import Random exposing (..)
 
 import Types exposing (..)
-import Cat exposing (..)
+import Update exposing (..)
 import View exposing (view)
 
 main =
   Html.program { init = (initModel, Cmd.none)
                , view = View.view
-               , update = update
-               , subscriptions = (always Sub.none)
+               , update = Update.update
+               , subscriptions = always Sub.none
                }
 
 initModel =
@@ -36,30 +36,3 @@ initBoard =
       -- Cat starting position
       |> Dict.insert initCat (Facing NE)
   
-
-update : Msg -> Model -> (Model, Cmd Msg)
-update msg model =
-  case msg of
-    Clicked coord ->
-      let
-        model_ =
-          { turn = Cat
-          , cat = model.cat
-          , board = Dict.insert coord Blocked model.board
-          }
-      in
-        (model_, Random.generate RollResult direction)
-
-    RollResult dir ->
-      let
-        cat_ = Cat.move model.cat dir
-        model_ =
-          { turn = Herder
-          , cat = cat_
-          , board =
-              model.board
-                |> Dict.insert model.cat Free
-                |> Dict.insert cat_ (Facing dir)
-          }
-      in
-        (model_, Cmd.none)

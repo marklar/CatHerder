@@ -1,7 +1,38 @@
-module Cat exposing (..)
+module Update exposing (..)
 
+import Dict exposing (..)
 import Random exposing (..)
+
 import Types exposing (..)
+
+
+update : Msg -> Model -> (Model, Cmd Msg)
+update msg model =
+  case msg of
+    Clicked coord ->
+      let
+        model_ =
+          { turn = Cat
+          , cat = model.cat
+          , board = Dict.insert coord Blocked model.board
+          }
+      in
+        (model_, Random.generate RollResult direction)
+
+    RollResult dir ->
+      let
+        cat_ = move model.cat dir
+        model_ =
+          { turn = Herder
+          , cat = cat_
+          , board =
+              model.board
+                |> Dict.insert model.cat Free
+                |> Dict.insert cat_ (Facing dir)
+          }
+      in
+        (model_, Cmd.none)
+
 
 direction : Random.Generator Direction
 direction =

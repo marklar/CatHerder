@@ -1,4 +1,4 @@
-module Hex exposing (..)
+module ViewHex exposing (..)
 
 import Svg exposing (..)
 import Svg.Events exposing (..)
