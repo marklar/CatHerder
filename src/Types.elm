@@ -10,6 +10,10 @@ numRows = 11
 numCols = 11
 hexSize = 5
 hexHeight = hexSize * 1.85
+orangish = "#F0AD00"
+greenish = "#7FD13B"
+bluish = "#60B5CC"
+grayish = "#5A6378"
 
 
 type alias Model =
@@ -19,6 +23,7 @@ type alias Model =
   }
 
 type Msg = Clicked Coord
+         | CatTurn (Maybe Int)
          | RollResult Direction
 
 type Direction = NE

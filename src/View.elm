@@ -14,14 +14,17 @@ import ViewHex exposing (..)
 view : Model -> Html Msg
 view model =
   div []
-    [ svg [ version "1.1"
-          , x "0"
-          , y "0"
-          , viewBox "0 0 323.141 372.95"
-          ]
+    [ Html.text <| toString model
+    , svg
+        [ version "1.1"
+        , x "0"
+        , y "0"
+        -- , viewBox "0 0 323.141 372.95"
+        , viewBox "0 0 500 500"
+        ]
         (hexGrid model)
-    , Html.text <| toString model
     ]
+
 
 hexGrid : Model -> List (Svg Msg)
 hexGrid model =
@@ -29,16 +32,17 @@ hexGrid model =
     |> Dict.toList
     |> List.map (oneHex model.turn)
 
+
 oneHex : Turn -> (Coord, Spot) -> Svg Msg
-oneHex turn ((row,col), spot) =
+oneHex turn (coord, spot) =
   let
     center =
-      getCenter (row,col)
+      getCenter coord
     (color, msg) =
       case spot of
         Free -> ( bluish
                 , case turn of
-                    Herder -> Just (Clicked (row,col))
+                    Herder -> Just (Clicked coord)
                     otherwise -> Nothing
                 )
         Blocked -> (orangish, Nothing)
@@ -46,8 +50,9 @@ oneHex turn ((row,col), spot) =
   in
     hexagon color hexSize center msg
 
+
 getCenter : Coord -> Pt
-getCenter (row, col) =
+getCenter (col, row) =
   let
     xMargin =
       if row % 2 == 0
@@ -60,10 +65,3 @@ getCenter (row, col) =
       toFloat row * hexHeight + hexSize
   in
     (x,y)
-
--------------------
-              
-orangish = "#F0AD00"
-greenish = "#7FD13B"
-bluish = "#60B5CC"
-grayish = "#5A6378"

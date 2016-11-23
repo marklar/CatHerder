@@ -2,6 +2,7 @@ module Update exposing (..)
 
 import Dict exposing (..)
 import Random exposing (..)
+import Task exposing (..)
 
 import Types exposing (..)
 
@@ -9,15 +10,12 @@ import Types exposing (..)
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
+    
     Clicked coord ->
-      let
-        model_ =
-          { turn = Cat
-          , cat = model.cat
-          , board = Dict.insert coord Blocked model.board
-          }
-      in
-        (model_, Random.generate RollResult direction)
+      updateClick model coord
+
+    CatTurn _ ->
+      (model, Random.generate RollResult direction)
 
     RollResult dir ->
       let
@@ -32,6 +30,18 @@ update msg model =
           }
       in
         (model_, Cmd.none)
+
+
+updateClick : Model -> Coord -> (Model, Cmd Msg)
+updateClick model coord =
+  let
+    model_ =
+      { turn = Cat
+      , cat = model.cat
+      , board = Dict.insert coord Blocked model.board
+      }
+  in
+    (model_, Task.perform CatTurn (succeed Nothing))
 
 
 direction : Random.Generator Direction
@@ -49,20 +59,20 @@ direction =
 
 
 move : Coord -> Direction -> Coord
-move (r,c) dir =
+move (c,r) dir =
   let
     left = r % 2 == 0
     diagWest = c - if left then 1 else 0
     diagEast = c + if left then 0 else 1
-    (r_, c_) =
+    (c_, r_) =
       case dir of
-        NW ->  (r-1, diagWest)
-        NE ->  (r-1, diagEast)
-        SW ->  (r+1, diagWest)
-        SE ->  (r+1, diagEast)
-        W ->   (r, c-1)
-        E ->   (r, c+1)
+        NW ->  (diagWest, r-1)
+        NE ->  (diagEast, r-1)
+        SW ->  (diagWest, r+1)
+        SE ->  (diagEast, r+1)
+        W ->   (c-1, r)
+        E ->   (c+1, r)
   in
-    ( clamp 0 (numRows-1) r_
-    , clamp 0 (numCols-1) c_
+    ( clamp 0 (numCols-1) c_
+    , clamp 0 (numRows-1) r_
     )
