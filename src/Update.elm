@@ -18,7 +18,6 @@ update msg model =
     DirOrder dirs ->
       moveCat model dirs
 
-------------
 
 setupBlocks : Model -> List Coord -> (Model, Cmd Msg)
 setupBlocks model coords =
@@ -39,22 +38,22 @@ setupBlocks model coords =
 moveCat : Model -> List Direction -> (Model, Cmd Msg)
 moveCat model dirs =
   let
-    cat_ = Search.nextCoord model.board model.cat dirs
     -- TODO: clamp 0 maxCols | maxRows
-    model_ =
-      { turn = Herder
-      , cat = cat_
-      , board = moveCatFromTo model.board model.cat cat_
-      }
+    model_ = 
+      case Search.nextCoord model.board model.cat dirs of
+        Nothing ->
+          { model | turn = Trapped }
+        Just cat_ ->
+          let board_ = model.board
+                     |> Dict.insert model.cat Free
+                     |> Dict.insert cat_ (Facing NE)  -- FIXME
+          in
+            { turn = Herder
+            , cat = cat_
+            , board = board_
+            }
   in
     (model_, Cmd.none)
-
-
-moveCatFromTo : Board -> Coord -> Coord -> Board
-moveCatFromTo board from to =
-  board
-    |> Dict.insert to (Facing NE)  -- FIXME
-    |> Dict.insert from Free
 
 
 block : Model -> Coord -> (Model, Cmd Msg)

@@ -15,21 +15,19 @@ type alias CameFrom = Dict Coord Coord
 nowhere : Coord
 nowhere = (-1,-1)
 
-nextCoord : Board -> Coord -> List Direction -> Coord
+nextCoord : Board -> Coord -> List Direction -> Maybe Coord
 nextCoord board coord dirs =
   let
     frontier = Fifo.fromList [coord]
     cameFrom = Dict.fromList [(coord, nowhere)]
   in
-    case nextSpot board dirs frontier cameFrom of
-      Nothing -> coord
-      Just coord_ -> coord_
+    nextCoord_ board dirs frontier cameFrom
 
     
-nextSpot : Board -> List Direction
-         -> Frontier -> CameFrom
-         -> Maybe Coord
-nextSpot board dirs frontier cameFrom =
+nextCoord_ : Board -> List Direction
+           -> Frontier -> CameFrom
+           -> Maybe Coord
+nextCoord_ board dirs frontier cameFrom =
   case Fifo.remove frontier of
 
     -- We've run out of frontier spots to try.
@@ -53,7 +51,7 @@ nextSpot board dirs frontier cameFrom =
           -- Remember for each neighbor where we came from to get there.
           cf_ = List.foldl (\n -> Dict.insert n curr) cameFrom ns
         in
-          nextSpot board dirs f_ cf_
+          nextCoord_ board dirs f_ cf_
 
 
 isBoardEdge : Coord -> Bool
@@ -61,6 +59,7 @@ isBoardEdge (c,r) =
   c == 0 || c == maxCol ||
     r == 0 || r == maxRow
 
+---------------
 
 -- Always selects neighbors in the same order.
 -- TODO: Pass in a Direction for it to start with.
@@ -87,6 +86,7 @@ isFree board coord =
     Just Free -> True
     otherwise -> False
     
+---------------
 
 pathStart : Coord -> CameFrom -> Coord
 pathStart coord cameFrom =
