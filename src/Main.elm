@@ -25,14 +25,12 @@ initCat = (5,5)
 initBoard : Board
 initBoard =
   let
-    upto n = List.range 0 (n-1)
-    colNums = upto numCols
+    upto n = List.range 0 n
+    rowNums = upto maxRow
     coords = List.concatMap
-             (\r -> List.map ((,) r) colNums)
-               (upto numRows)
+             (\c -> List.map ((,) c) rowNums)
+               (upto maxCol)
   in
     List.map (\c -> (c,Free)) coords
       |> Dict.fromList
-      -- Cat starting position
       |> Dict.insert initCat (Facing NE)
-  
