@@ -3,7 +3,7 @@ module Update exposing (..)
 import Dict exposing (..)
 import Random exposing (..)
 
-import Direction exposing (directionOrder)
+import Generators exposing (directionOrder)
 import Types exposing (..)
 import Search exposing (..)
 

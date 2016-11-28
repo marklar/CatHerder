@@ -3,7 +3,7 @@ import Dict exposing (..)
 import Random exposing (..)
 
 import Types exposing (..)
-import Direction exposing (..)
+import Generators exposing (..)
 import Constants exposing (..)
 import Update exposing (..)
 import View exposing (view)

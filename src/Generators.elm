@@ -1,4 +1,4 @@
-module Direction exposing (..)
+module Generators exposing (..)
 
 import Random exposing (..)
 
