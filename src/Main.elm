@@ -3,24 +3,30 @@ import Dict exposing (..)
 import Random exposing (..)
 
 import Types exposing (..)
+import Direction exposing (..)
+import Constants exposing (..)
 import Update exposing (..)
 import View exposing (view)
 
+
 main =
-  Html.program { init = (initModel, Cmd.none)
+  Html.program { init = (initModel, Random.generate SetupCoords setupCoords)
                , view = View.view
                , update = Update.update
                , subscriptions = always Sub.none
                }
 
+
 initModel =
-  { turn = Herder
+  { turn = Setup
   , cat = initCat
   , board = initBoard
   }
 
+
 initCat : Coord
 initCat = (5,5)
+
 
 initBoard : Board
 initBoard =

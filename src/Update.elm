@@ -11,12 +11,30 @@ import Search exposing (..)
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
+    SetupCoords coords ->
+      setupBlocks model coords
     Clicked coord ->
       block model coord
     DirOrder dirs ->
       moveCat model dirs
 
 ------------
+
+setupBlocks : Model -> List Coord -> (Model, Cmd Msg)
+setupBlocks model coords =
+  let
+    board_ = List.foldl
+             (\c b -> Dict.insert c Blocked b)
+               model.board
+               coords
+    model_ =
+      { turn = Herder
+      , cat = model.cat
+      , board = board_
+      }
+  in
+    (model_, Cmd.none)
+
 
 moveCat : Model -> List Direction -> (Model, Cmd Msg)
 moveCat model dirs =

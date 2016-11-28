@@ -7,6 +7,7 @@ import Svg.Attributes exposing (..)
 import Dict exposing (..)
 
 import Types exposing (..)
+import Constants exposing (..)
 import ViewHex exposing (..)
 
 

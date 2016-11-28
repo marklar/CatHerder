@@ -5,6 +5,7 @@ import Dict exposing (..)
 -- import Debug exposing (log)
 
 import Types exposing (..)
+import Constants exposing (..)
 
 type alias Path = List Coord
 type alias Frontier = Fifo Coord
