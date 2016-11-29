@@ -13,13 +13,17 @@ type alias CameFrom = Dict Coord Coord
 
 
 nowhere : Coord
-nowhere = (-1,-1)
+nowhere =
+  (-1,-1)
 
 nextCoord : Board -> Coord -> List Direction -> Maybe Coord
 nextCoord board coord dirs =
   let
-    frontier = Fifo.fromList [coord]
-    cameFrom = Dict.fromList [(coord, nowhere)]
+    frontier =
+      Fifo.fromList [coord]
+
+    cameFrom =
+      Dict.fromList [(coord, nowhere)]
   in
     nextCoord_ board dirs frontier cameFrom
 
@@ -43,13 +47,20 @@ nextCoord_ board dirs frontier cameFrom =
       else
         let
           -- Gather up frontier spot's explorable neighbors.
-          unvisited c = not (Dict.member c cameFrom)
-          ns = freeNeighbors board dirs curr
-             |> List.filter unvisited
+          unvisited c =
+            not (Dict.member c cameFrom)
+
+          ns =
+            freeNeighbors board dirs curr
+              |> List.filter unvisited
+
           -- Add them onto END of queue to explore (i.e. breadth-first).
-          f_ = List.foldl Fifo.insert frontier_ ns
+          f_ =
+            List.foldl Fifo.insert frontier_ ns
+
           -- Remember for each neighbor where we came from to get there.
-          cf_ = List.foldl (\n -> Dict.insert n curr) cameFrom ns
+          cf_ =
+            List.foldl (\n -> Dict.insert n curr) cameFrom ns
         in
           nextCoord_ board dirs f_ cf_
 
@@ -66,16 +77,31 @@ isBoardEdge (c,r) =
 freeNeighbors : Board -> List Direction -> Coord -> List Coord
 freeNeighbors board dirs (c,r) =
   let
-    diagWest = if r % 2 == 0 then c-1 else c
-    diagEast = if r % 2 == 0 then c else c+1
+    diagWest =
+      if r % 2 == 0 then c-1 else c
+
+    diagEast =
+      if r % 2 == 0 then c else c+1
+
     coordFor d =
       case d of
-        NW -> (diagWest, r-1)
-        NE -> (diagEast, r-1)
-        SW -> (diagWest, r+1)
-        SE -> (diagEast, r+1)
-        W  -> (c-1, r)
-        E  -> (c+1, r)
+        NW ->
+          (diagWest, r-1)
+
+        NE ->
+          (diagEast, r-1)
+
+        SW ->
+          (diagWest, r+1)
+
+        SE ->
+          (diagEast, r+1)
+
+        W ->
+          (c-1, r)
+
+        E ->
+          (c+1, r)
   in
     List.filter (isFree board) (List.map coordFor dirs)
 
@@ -83,17 +109,25 @@ freeNeighbors board dirs (c,r) =
 isFree : Board -> Coord -> Bool
 isFree board coord =
   case Dict.get coord board of
-    Just Free -> True
-    otherwise -> False
+    Just Free ->
+      True
+
+    otherwise ->
+      False
     
 ---------------
 
 pathStart : Coord -> CameFrom -> Coord
 pathStart coord cameFrom =
   case path coord cameFrom of
-    f :: s :: _ -> s
-    f :: _ -> f
-    otherwise -> coord
+    f :: s :: _ ->
+      s
+
+    f :: _ ->
+      f
+
+    otherwise ->
+      coord
 
 
 path : Coord -> CameFrom -> Path
@@ -102,7 +136,9 @@ path coord cameFrom =
     foo : Coord -> Path -> Path
     foo c acc =
       case Dict.get c cameFrom of
-        Nothing -> acc
+        Nothing ->
+          acc
+
         Just c_ ->
           if c_ == nowhere then
             acc

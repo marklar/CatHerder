@@ -37,15 +37,20 @@ oneSpot turn (coord, spot) =
   let
     (color, msg) =
       case spot of
-        Free -> ( bluish
-                , case turn of
-                    Herder -> Just (Clicked coord)
-                    otherwise -> Nothing
-                )
-        Blocked -> (orangish, Nothing)
-        otherwise -> (grayish, Nothing)
+        Free ->
+          ( bluish
+          , case turn of
+              Herder -> Just (Clicked coord)
+              otherwise -> Nothing
+          )
+
+        Blocked ->
+          (orangish, Nothing)
+
+        otherwise ->
+          (grayish, Nothing)
   in
-    -- ViewHex.hexagon color spotRadius (getCenter coord) msg
+    -- ViewHex.hexagon...
     ViewCircle.circle color spotRadius (getCenter coord) msg
 
 

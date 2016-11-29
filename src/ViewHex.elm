@@ -17,8 +17,11 @@ hexagon color size center msg =
 
     attrs =
       case msg of
-        Just msg -> (onClick msg) :: baseAttrs
-        Nothing -> baseAttrs
+        Just msg ->
+          (onClick msg) :: baseAttrs
+
+        Nothing ->
+          baseAttrs
   in
     Svg.polygon attrs []
 

@@ -31,11 +31,16 @@ initCat = (5,5)
 initBoard : Board
 initBoard =
   let
-    upto n = List.range 0 n
-    rowNums = upto maxRow
-    coords = List.concatMap
-             (\c -> List.map ((,) c) rowNums)
-               (upto maxCol)
+    upto n =
+      List.range 0 n
+
+    rowNums =
+      upto maxRow
+
+    coords =
+      List.concatMap
+            (\c -> List.map ((,) c) rowNums)
+              (upto maxCol)
   in
     List.map (\c -> (c,Free)) coords
       |> Dict.fromList

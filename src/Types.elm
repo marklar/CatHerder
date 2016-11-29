@@ -14,9 +14,9 @@ type alias Model =
   }
 
 
-type Msg = SetupCoords (List Coord)
-         | Clicked Coord  -- Herder's turn
-         | DirOrder (List Direction)
+type Msg = SetupCoords (List Coord)  -- turn: Setup
+         | Clicked Coord             -- turn: Herder
+         | DirOrder (List Direction) -- turn: Cat
 
 
 type Direction = NE
