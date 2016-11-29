@@ -14,25 +14,34 @@ hexagon color size center msg =
       [ fill color
       , points (ptsStr (hexPts center size))
       ]
+
     attrs =
       case msg of
         Just msg -> (onClick msg) :: baseAttrs
         Nothing -> baseAttrs
   in
-    polygon attrs []
+    Svg.polygon attrs []
 
             
 hexPts : Pt -> Float -> List Pt
 hexPts (x,y) size =
   let
-    ht = size * 2
-    wd = (sqrt 3) / 2 * ht
-    topY = y - size
-    upY = y - (ht / 4)
-    loY = y + (ht / 4)
-    btmY = y + size
-    leftX = x - (wd / 2)
-    rightX = x + (wd / 2)
+    ht =
+      size * 2
+    wd =
+      (sqrt 3) / 2 * ht
+    topY =
+      y - size
+    upY =
+      y - (ht / 4)
+    loY =
+      y + (ht / 4)
+    btmY =
+      y + size
+    leftX =
+      x - (wd / 2)
+    rightX =
+      x + (wd / 2)
   in
     -- clockwise, starting at midnight
     [ (x, topY)
@@ -43,11 +52,13 @@ hexPts (x,y) size =
     , (leftX, upY)
     ]
 
+
 ptsStr : List Pt -> String
 ptsStr pts =
   pts
     |> List.map showPt
     |> String.join " "
+
 
 showPt : Pt -> String
 showPt (x,y) =

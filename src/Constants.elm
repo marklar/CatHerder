@@ -7,8 +7,8 @@ maxCol = numCols - 1
 numRows = 11
 maxRow = numRows - 1
 
-hexSize = 5
-hexHeight = hexSize * 1.85
+spotRadius = 5
+spotHeight = spotRadius * 1.85  -- depends on shape!
 
 orangish = "#F0AD00"
 greenish = "#7FD13B"

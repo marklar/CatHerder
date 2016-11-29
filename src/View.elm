@@ -8,7 +8,8 @@ import Dict exposing (..)
 
 import Types exposing (..)
 import Constants exposing (..)
-import ViewHex exposing (..)
+-- import ViewHex exposing (..)
+import ViewCircle exposing (..)
 
 
 view : Model -> Html Msg
@@ -20,19 +21,19 @@ view model =
         , y "0"
         , viewBox "0 0 200 200"
         ]
-        (hexGrid model)
+        (grid model)
     ]
 
 
-hexGrid : Model -> List (Svg Msg)
-hexGrid model =
+grid : Model -> List (Svg Msg)
+grid model =
   model.board
     |> Dict.toList
-    |> List.map (oneHex model.turn)
+    |> List.map (oneSpot model.turn)
 
 
-oneHex : Turn -> (Coord, Spot) -> Svg Msg
-oneHex turn (coord, spot) =
+oneSpot : Turn -> (Coord, Spot) -> Svg Msg
+oneSpot turn (coord, spot) =
   let
     (color, msg) =
       case spot of
@@ -44,7 +45,8 @@ oneHex turn (coord, spot) =
         Blocked -> (orangish, Nothing)
         otherwise -> (grayish, Nothing)
   in
-    hexagon color hexSize (getCenter coord) msg
+    -- ViewHex.hexagon color spotRadius (getCenter coord) msg
+    ViewCircle.circle color spotRadius (getCenter coord) msg
 
 
 getCenter : Coord -> Pt
@@ -54,11 +56,13 @@ getCenter (col, row) =
       if row % 2 == 0 then
         0
       else
-        hexSize
+        spotRadius
+
     x =
-      (toFloat col * 2.0 * hexSize) +
-      xMargin + hexSize
+      (toFloat col * 2.1 * spotRadius) +
+      xMargin + spotRadius
+
     y =
-      toFloat row * hexHeight + hexSize
+      toFloat row * spotHeight + spotRadius
   in
     (x,y)
