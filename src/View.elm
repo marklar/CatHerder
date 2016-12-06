@@ -15,13 +15,12 @@ import ViewCircle exposing (..)
 view : Model -> Html Msg
 view model =
   div []
-    [ svg
-        [ version "1.1"
-        , x "0"
-        , y "0"
-        , viewBox "0 0 200 200"
-        ]
-        (grid model)
+    [ svg [ version "1.1"
+          , x "0"
+          , y "0"
+          , viewBox "0 0 200 200"
+          ]
+          (grid model)
     ]
 
 

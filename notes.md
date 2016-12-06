@@ -47,7 +47,7 @@ http://package.elm-lang.org/packages/sgraf812/elm-graph/1.1.2/
 
 ### Queue
 
-#### Regular LIFO Queue
+#### Regular FIFO Queue (not LIFO (Stack))
 
 http://package.elm-lang.org/packages/martinsk/elm-datastructures/latest/Queue
 https://github.com/imeckler/queue
