@@ -21,16 +21,16 @@ view model =
                     , Svg.viewBox viewBoxDimStr
                     ]
               (grid model)
-          , mbButton model.turn
+          , buttonOrEmpty model.turn
           ]
         )
 
 
-mbButton : Turn -> Html.Html Msg
-mbButton turn =
+buttonOrEmpty : Turn -> Html.Html Msg
+buttonOrEmpty turn =
     let
         btn =
-            Html.button [ Html.onClick Reset ] [ Html.text "reset" ]
+            Html.button [ Html.onClick Reset ] [ Html.text "Try Again" ]
     in
         case turn of
             Escaped ->
