@@ -7,40 +7,45 @@ import Html.Events as Html
 import Svg
 import Svg.Attributes as Svg
 import Types exposing (Msg(..), Model, Coord, Spot(..), Pt, Turn(..))
--- import ViewCircle as V
-import ViewHex as V
+-- import ViewCircle as Spot
+import ViewHex as Spot
 
 
 view : Model -> Html.Html Msg
 view model =
+    Html.div []
+        ( [ Html.text (showTurn model.turn)
+          , Svg.svg [ Svg.version "1.1"
+                    , Svg.x "0"
+                    , Svg.y "0"
+                    , Svg.viewBox viewBoxDimStr
+                    ]
+              (grid model)
+          , mbButton model.turn
+          ]
+        )
+
+
+mbButton : Turn -> Html.Html Msg
+mbButton turn =
     let
         btn =
             Html.button [ Html.onClick Reset ] [ Html.text "reset" ]
-
-        btnList =
-            case model.turn of
-                Escaped ->
-                    [ btn ]
-
-                Trapped ->
-                    [ btn ]
-
-                _ ->
-                    []
     in
-    Html.div []
-        [ Html.text (showTurn model.turn)
-        , Html.div []
-            [ Svg.svg
-                  [ Svg.version "1.1"
-                  , Svg.x "0"
-                  , Svg.y "0"
-                  , Svg.viewBox "0 0 120 105"
-                  ]
-                  (grid model)
-            ]
-        , Html.div [] btnList
-        ]
+        case turn of
+            Escaped ->
+                btn
+
+            Trapped ->
+                btn
+
+            _ ->
+                memptyHtml
+
+
+memptyHtml : Html.Html a
+memptyHtml =
+    Html.text ""
 
 
 showTurn : Turn -> String
@@ -70,49 +75,75 @@ grid model =
 oneSpot : Turn -> ( Coord, Spot ) -> Svg.Svg Msg
 oneSpot turn ( coord, spot ) =
     let
-        ( color, mbMsg ) =
+        color =
             case spot of
                 Free ->
-                    ( Constants.bluish
-                    , case turn of
-                        Herder ->
-                            Just (Clicked coord)
-
-                        otherwise ->
-                            Nothing
-                    )
+                    Constants.bluish
 
                 Blocked ->
-                    ( Constants.orangish, Nothing )
+                    Constants.orangish
 
                 CatFacing _ ->
-                    ( Constants.grayish, Nothing )
+                    Constants.grayish
+
+        mbMsg =
+            if turn == Herder && spot == Free then
+                Just (Clicked coord)
+
+            else
+                Nothing
     in
-    V.spot color Constants.spotRadius (getCenter coord) mbMsg
+    Spot.spot color Constants.spotRadius (getCenter coord) mbMsg
+
+
+-- VIEWBOX DIMENSIONS
+
+viewBoxDimStr =
+    let
+        ( w, h ) =
+            viewBoxDimensions
+    in
+    "0 0 " ++ String.fromFloat w ++ " " ++ String.fromFloat h
+
+
+viewBoxDimensions : ( Float, Float )
+viewBoxDimensions =
+    let
+        maxBoardWidth =
+            getCenterX ( Constants.maxCol, 1 )
+                + Constants.spotRadius
+
+        maxBoardHeight =
+            getCenterY Constants.maxRow
+                + Constants.spotRadius
+    in
+    ( maxBoardWidth, maxBoardHeight )
+
 
 
 -- GET CENTER
 
 getCenter : Coord -> Pt
 getCenter ( col, row ) =
-    ( getX ( col, row ), getY row )
+    ( getCenterX ( col, row ), getCenterY row )
 
 
-getX : Coord -> Float
-getX ( col, row ) =
+getCenterX : Coord -> Float
+getCenterX ( col, row ) =
     let
         xMargin =
             if modBy 2 row == 0 then
                 0
+
             else
                 Constants.spotRadius
     in
     xMargin
-        + (toFloat col * 2.1 * Constants.spotRadius)
+        + (toFloat col * (Constants.spotRadius * 2.1))
         + Constants.spotRadius
 
 
-getY : Int -> Float
-getY row =
+getCenterY : Int -> Float
+getCenterY row =
     toFloat row * Constants.spotHeight
         + Constants.spotRadius
