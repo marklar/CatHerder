@@ -3,14 +3,13 @@ module CatHerder.Update exposing (update)
 import Dict
 import Process
 import Random
-import Set
 import Task
-import Time
 
 import CatHerder.Constants as Constants
 import CatHerder.Update.Generators exposing (directionOrder)
 import CatHerder.Init as Init
 import CatHerder.Update.Search as Search
+import CatHerder.Update.Setup as Setup
 import CatHerder.Types exposing (Msg(..), Model, Coord, Spot(..), Turn(..), Direction(..))
 
 
@@ -21,7 +20,7 @@ update msg model =
             Init.init ()
 
         SetupCoords coords ->
-            setupBlocks model coords
+            Setup.setupBlocks model coords
 
         Clicked coord ->
             block model coord
@@ -31,46 +30,6 @@ update msg model =
 
         DirOrder dirs ->
             moveCat model dirs
-
-
--- | If coords contains Init.initCatCoord,
--- then replace it with another Coord.
-setupBlocks : Model -> List Coord -> ( Model, Cmd Msg )
-setupBlocks model blockCoords =
-    let
-        board_ =
-            List.foldl
-                (\c -> Dict.insert c Blocked)
-                model.board
-                blockCoords
-
-        model_ =
-            { model
-                | turn = Herder
-                , board = board_
-            }
-    in
-    if not (areBlocksOkay blockCoords) then
-        Init.init ()
-    else
-        ( model_, Cmd.none )
-
-
-areBlocksOkay : List Coord -> Bool
-areBlocksOkay blockCoords =
-    let
-        areUniq =
-            List.length (uniq blockCoords)
-                == Constants.numInitBlocks
-
-        containCat =
-            List.member Init.initCatCoord blockCoords
-    in
-        areUniq && not containCat
-
-
-uniq : List comparable -> List comparable
-uniq = Set.toList << Set.fromList
 
 
 moveCat : Model -> List Direction -> ( Model, Cmd Msg )

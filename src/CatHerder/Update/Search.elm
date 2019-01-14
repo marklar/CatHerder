@@ -37,12 +37,11 @@ nextCoord board coord dirs =
     nextCoord_ board dirs frontier cameFrom
 
 
-nextCoord_ :
-    Board
-    -> List Direction
-    -> Frontier
-    -> CameFrom
-    -> Maybe Coord
+nextCoord_ : Board
+           -> List Direction
+           -> Frontier
+           -> CameFrom
+           -> Maybe Coord
 nextCoord_ board dirs frontier cameFrom =
     case Fifo.remove frontier of
         -- We've run out of frontier spots to try.
@@ -148,11 +147,11 @@ isFree board coord =
 pathStart : Coord -> CameFrom -> Coord
 pathStart coord cameFrom =
     case path coord cameFrom of
-        f :: s :: _ ->
-            s
+        fst :: snd :: _ ->
+            snd
 
-        f :: _ ->
-            f
+        fst :: _ ->
+            fst
 
         otherwise ->
             coord
