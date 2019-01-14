@@ -43,16 +43,23 @@ moveCat model dirs =
 
                 Just cat_ ->
                     let
+                        -- 1. Free up old cat pos (model.cat).
+                        -- 2. Put ca at new cat pos (pos_).
+                        -- (Direction facing doesn't currently matter,
+                        -- but eventually we'll use it to draw cat differently.)
                         board_ =
                             model.board
                                 |> Dict.insert model.cat Free
                                 |> Dict.insert cat_ (CatFacing NE)
 
+                        turn_ =
+                            if Search.isBoardEdge cat_ then
+                                Escaped
+
+                            else
+                                Herder
                     in
-                    { turn = if Search.isBoardEdge cat_ then
-                                 Escaped
-                             else
-                                 Herder
+                    { turn = turn_
                     , cat = cat_
                     , board = board_
                     }
