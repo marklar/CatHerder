@@ -65,7 +65,6 @@ showTurn turn =
             "Congrats! You trapped the cat."
 
 
-
 grid : Model -> List (Svg.Svg Msg)
 grid model =
     model.board
@@ -119,7 +118,6 @@ viewBoxDimensions =
                 + Constants.spotRadius
     in
     ( maxBoardWidth, maxBoardHeight )
-
 
 
 -- GET CENTER
