@@ -14,8 +14,15 @@ module Constants exposing
 
 
 numInitBlocks =
-    10
+    7
 
+
+catDelayMillis : Float
+catDelayMillis =
+    300
+
+
+-- BOARD DIMENSIONS
 
 numCols =
     11
@@ -33,6 +40,8 @@ maxRow =
     numRows - 1
 
 
+-- SPOT SIZE
+
 spotRadius =
     5
 
@@ -41,6 +50,8 @@ spotRadius =
 spotHeight =
     spotRadius * 1.85
 
+
+-- COLORS
 
 orangish =
     "#F0AD00"

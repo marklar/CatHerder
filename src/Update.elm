@@ -1,10 +1,15 @@
 module Update exposing (update)
 
+import Constants
 import Dict
 import Generators exposing (directionOrder)
 import Init
+import Process
 import Random
 import Search
+import Set
+import Task
+import Time
 import Types exposing (Msg(..), Model, Coord, Spot(..), Turn(..), Direction(..))
 
 
@@ -20,18 +25,23 @@ update msg model =
         Clicked coord ->
             block model coord
 
+        CatDelay ->
+            ( model, Random.generate DirOrder directionOrder )
+
         DirOrder dirs ->
             moveCat model dirs
 
 
+-- | If coords contains Init.initCatCoord,
+-- then replace it with another Coord.
 setupBlocks : Model -> List Coord -> ( Model, Cmd Msg )
-setupBlocks model coords =
+setupBlocks model blockCoords =
     let
         board_ =
             List.foldl
                 (\c -> Dict.insert c Blocked)
                 model.board
-                coords
+                blockCoords
 
         model_ =
             { model
@@ -39,7 +49,28 @@ setupBlocks model coords =
                 , board = board_
             }
     in
-    ( model_, Cmd.none )
+    if not (areBlocksOkay blockCoords)
+    then
+        Init.init ()
+    else
+        ( model_, Cmd.none )
+
+
+areBlocksOkay : List Coord -> Bool
+areBlocksOkay blockCoords =
+    let
+        areUniq =
+            List.length (uniq blockCoords)
+                == Constants.numInitBlocks
+
+        containCat =
+            List.member Init.initCatCoord blockCoords
+    in
+        areUniq && not containCat
+
+
+uniq : List comparable -> List comparable
+uniq = Set.toList << Set.fromList
 
 
 moveCat : Model -> List Direction -> ( Model, Cmd Msg )
@@ -83,4 +114,10 @@ block model coord =
                 , board = board_
             }
     in
-    ( model_, Random.generate DirOrder directionOrder )
+    ( model_, delay Constants.catDelayMillis CatDelay )
+
+
+delay : Float -> msg -> Cmd msg
+delay time msg =
+    Process.sleep time
+        |> Task.perform (\_ -> msg)

@@ -30,6 +30,7 @@ type alias Model =
 type Msg
     = SetupCoords (List Coord)
     | Clicked Coord              -- ^ turn: Herder
+    | CatDelay
     | DirOrder (List Direction)  -- ^ turn: Cat
     | Reset
 
