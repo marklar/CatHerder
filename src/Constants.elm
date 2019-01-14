@@ -1,5 +1,6 @@
 module Constants exposing
     ( bluish
+    , catDelayMillis
     , grayish
     , greenish
     , maxCol
