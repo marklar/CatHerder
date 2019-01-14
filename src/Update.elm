@@ -1,78 +1,86 @@
-module Update exposing (..)
+module Update exposing (update)
 
-import Dict exposing (..)
-import Random exposing (..)
-
+import Dict
 import Generators exposing (directionOrder)
-import Types exposing (..)
-import Search exposing (..)
+import Init
+import Random
+import Search
+import Types exposing (Msg(..), Model, Coord, Spot(..), Turn(..), Direction(..))
 
 
-update : Msg -> Model -> (Model, Cmd Msg)
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-  case msg of
-    SetupCoords coords ->
-      setupBlocks model coords
+    case msg of
+        Reset ->
+            Init.init ()
 
-    Clicked coord ->
-      block model coord
+        SetupCoords coords ->
+            setupBlocks model coords
 
-    DirOrder dirs ->
-      moveCat model dirs
+        Clicked coord ->
+            block model coord
+
+        DirOrder dirs ->
+            moveCat model dirs
 
 
-setupBlocks : Model -> List Coord -> (Model, Cmd Msg)
+setupBlocks : Model -> List Coord -> ( Model, Cmd Msg )
 setupBlocks model coords =
-  let
-    board_ =
-      List.foldl
-            (\c -> Dict.insert c Blocked)
-              model.board
-              coords
+    let
+        board_ =
+            List.foldl
+                (\c -> Dict.insert c Blocked)
+                model.board
+                coords
 
-    model_ =
-      { turn = Herder
-      , cat = model.cat
-      , board = board_
-      }
-  in
-    (model_, Cmd.none)
-
-
-moveCat : Model -> List Direction -> (Model, Cmd Msg)
-moveCat model dirs =
-  let
-    -- TODO: clamp 0 maxCols | maxRows
-    model_ = 
-      case Search.nextCoord model.board model.cat dirs of
-        Nothing ->
-          { model | turn = Trapped }
-
-        Just cat_ ->
-          let
-            board_ =
-              model.board
-                |> Dict.insert model.cat Free
-                |> Dict.insert cat_ (Facing NE)  -- FIXME
-          in
-            { turn = Herder
-            , cat = cat_
-            , board = board_
+        model_ =
+            { model
+                | turn = Herder
+                , board = board_
             }
-  in
-    (model_, Cmd.none)
+    in
+    ( model_, Cmd.none )
 
 
-block : Model -> Coord -> (Model, Cmd Msg)
+moveCat : Model -> List Direction -> ( Model, Cmd Msg )
+moveCat model dirs =
+    let
+        -- TODO: clamp 0 maxCols | maxRows
+        model_ =
+            case Search.nextCoord model.board model.cat dirs of
+                Nothing ->
+                    { model | turn = Trapped }
+
+                Just cat_ ->
+                    let
+                        board_ =
+                            model.board
+                                |> Dict.insert model.cat Free
+                                |> Dict.insert cat_ (CatFacing NE)
+
+                    in
+                    { turn = if Search.isBoardEdge cat_
+                             then
+                                 Escaped
+                             else
+                                 Herder
+                    , cat = cat_
+                    , board = board_
+                    }
+    in
+    ( model_, Cmd.none )
+
+
+block : Model -> Coord -> ( Model, Cmd Msg )
 block model coord =
-  let
-    board_ =
-      Dict.insert coord Blocked model.board
+    let
+        board_ =
+            Dict.insert coord Blocked model.board
 
-    model_ =
-      { turn = Cat
-      , cat = model.cat
-      , board = board_
-      }
-  in
-    (model_, Random.generate DirOrder directionOrder)
+        model_ =
+            { model
+                | turn = Cat
+                , board = board_
+            }
+    in
+    ( model_, Random.generate DirOrder directionOrder )

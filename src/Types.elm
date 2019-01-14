@@ -1,42 +1,60 @@
-module Types exposing (..)
+module Types exposing
+    ( Board
+    , Coord
+    , Direction(..)
+    , Model
+    , Msg(..)
+    , Pt
+    , Spot(..)
+    , Turn(..)
+    )
 
-import Dict exposing (..)
+import Dict
 
 
-type alias Coord = (Int,Int)
-type alias Pt = (Float,Float)
+type alias Coord =
+    ( Int, Int )
+
+
+type alias Pt =
+    ( Float, Float )
 
 
 type alias Model =
-  { turn : Turn
-  , cat : Coord    -- el parador del gat
-  , board : Board
-  }
+    { turn : Turn
+    , cat : Coord    -- ^ el parador del gat
+    , board : Board
+    }
 
 
-type Msg = SetupCoords (List Coord)  -- turn: Setup
-         | Clicked Coord             -- turn: Herder
-         | DirOrder (List Direction) -- turn: Cat
+type Msg
+    = SetupCoords (List Coord)
+    | Clicked Coord              -- ^ turn: Herder
+    | DirOrder (List Direction)  -- ^ turn: Cat
+    | Reset
 
 
-type Direction = NE
-               | E
-               | SE
-               | SW
-               | W
-               | NW
+type Direction
+    = NE
+    | E
+    | SE
+    | SW
+    | W
+    | NW
 
 
-type Turn = Setup
-          | Cat
-          | Herder
-          | Escaped
-          | Trapped
+type Turn
+    = Cat
+    | Herder
+    | Escaped
+    | Trapped
 
 
-type alias Board = Dict Coord Spot
-            
+type alias Board =
+    Dict.Dict Coord Spot
 
-type Spot = Free
-          | Blocked
-          | Facing Direction
+
+type Spot
+    = Free
+    | Blocked
+    | CatFacing Direction

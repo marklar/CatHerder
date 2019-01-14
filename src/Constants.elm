@@ -1,27 +1,58 @@
-module Constants exposing (..)
+module Constants exposing
+    ( bluish
+    , grayish
+    , greenish
+    , maxCol
+    , maxRow
+    , numCols
+    , numInitBlocks
+    , numRows
+    , orangish
+    , spotHeight
+    , spotRadius
+    )
+
 
 numInitBlocks =
-  10
+    10
+
 
 numCols =
-  11
+    11
+
+
 maxCol =
-  numCols - 1
+    numCols - 1
+
+
 numRows =
-  11
+    11
+
+
 maxRow =
-  numRows - 1
+    numRows - 1
+
 
 spotRadius =
-  5
+    5
+
+
+-- | Depends on shape!
 spotHeight =
-  spotRadius * 1.85  -- depends on shape!
+    spotRadius * 1.85
+
 
 orangish =
-  "#F0AD00"
+    "#F0AD00"
+
+
 greenish =
-  "#7FD13B"
+    "#7FD13B"
+
+
 bluish =
-  "#60B5CC"
+    "#60B5CC"
+
+
 grayish =
-  "#5A6378"
+    "#5A6378"
