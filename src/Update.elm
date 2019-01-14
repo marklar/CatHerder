@@ -49,8 +49,7 @@ setupBlocks model blockCoords =
                 , board = board_
             }
     in
-    if not (areBlocksOkay blockCoords)
-    then
+    if not (areBlocksOkay blockCoords) then
         Init.init ()
     else
         ( model_, Cmd.none )
@@ -90,8 +89,7 @@ moveCat model dirs =
                                 |> Dict.insert cat_ (CatFacing NE)
 
                     in
-                    { turn = if Search.isBoardEdge cat_
-                             then
+                    { turn = if Search.isBoardEdge cat_ then
                                  Escaped
                              else
                                  Herder

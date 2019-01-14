@@ -20,7 +20,7 @@ numInitBlocks =
 
 catDelayMillis : Float
 catDelayMillis =
-    300
+    400
 
 
 -- BOARD DIMENSIONS

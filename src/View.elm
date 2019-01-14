@@ -30,16 +30,16 @@ view model =
     in
     Html.div []
         [ Html.text (showTurn model.turn)
-        , Html.div [] btnList
         , Html.div []
             [ Svg.svg
                   [ Svg.version "1.1"
                   , Svg.x "0"
                   , Svg.y "0"
-                  , Svg.viewBox "0 0 200 200"
+                  , Svg.viewBox "0 0 120 105"
                   ]
                   (grid model)
             ]
+        , Html.div [] btnList
         ]
 
 
@@ -104,7 +104,6 @@ getX ( col, row ) =
         xMargin =
             if modBy 2 row == 0 then
                 0
-
             else
                 Constants.spotRadius
     in
