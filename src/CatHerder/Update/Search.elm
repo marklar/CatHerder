@@ -1,11 +1,11 @@
-module Search exposing ( nextCoord, isBoardEdge )
+module CatHerder.Update.Search exposing ( nextCoord, isBoardEdge )
 
 -- import Debug exposing (log)
-
-import Constants
 import Dict
 import Fifo
-import Types exposing (Board, Coord, Direction(..), Spot(..))
+
+import CatHerder.Constants as Constants
+import CatHerder.Types exposing (Board, Coord, Direction(..), Spot(..))
 
 
 type alias Path =

@@ -1,9 +1,10 @@
-module ViewHex exposing (spot)
+module CatHerder.View.Hex exposing (spot)
 
 import Svg
 import Svg.Attributes as Svg
 import Svg.Events as Svg
-import Types exposing (Pt, Msg)
+
+import CatHerder.Types exposing (Pt, Msg)
 
 
 spot : String -> Float -> Pt -> Maybe Msg -> Svg.Svg Msg

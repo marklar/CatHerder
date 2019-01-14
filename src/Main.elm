@@ -1,9 +1,10 @@
 module Main exposing (main)
 
 import Browser
-import Init
-import Update
-import View
+
+import CatHerder.Init   as Init
+import CatHerder.Update as Update
+import CatHerder.View   as View
 
 
 main =

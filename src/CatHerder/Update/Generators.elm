@@ -1,8 +1,9 @@
-module Generators exposing (directionOrder, setupCoords)
+module CatHerder.Update.Generators exposing (directionOrder, setupCoords)
 
-import Constants
 import Random
-import Types exposing (Coord, Direction(..))
+
+import CatHerder.Constants as Constants
+import CatHerder.Types exposing (Coord, Direction(..))
 
 
 setupCoords : Random.Generator (List Coord)

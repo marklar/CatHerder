@@ -1,11 +1,12 @@
-module Init exposing (init, initCatCoord)
+module CatHerder.Init exposing (init, initCatCoord)
 
-import Constants
 import Dict
-import Generators
 import Random
-import Types exposing ( Board, Coord, Turn(..), Model
-                      , Direction(..), Msg(..), Spot(..) )
+
+import CatHerder.Constants as Constants
+import CatHerder.Update.Generators as Generators
+import CatHerder.Types exposing ( Board, Coord, Turn(..), Model
+                                , Direction(..), Msg(..), Spot(..) )
 
 
 init : () -> ( Model, Cmd Msg )

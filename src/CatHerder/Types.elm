@@ -1,4 +1,4 @@
-module Types exposing
+module CatHerder.Types exposing
     ( Board
     , Coord
     , Direction(..)

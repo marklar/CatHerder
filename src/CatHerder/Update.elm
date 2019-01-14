@@ -1,16 +1,17 @@
-module Update exposing (update)
+module CatHerder.Update exposing (update)
 
-import Constants
 import Dict
-import Generators exposing (directionOrder)
-import Init
 import Process
 import Random
-import Search
 import Set
 import Task
 import Time
-import Types exposing (Msg(..), Model, Coord, Spot(..), Turn(..), Direction(..))
+
+import CatHerder.Constants as Constants
+import CatHerder.Update.Generators exposing (directionOrder)
+import CatHerder.Init as Init
+import CatHerder.Update.Search as Search
+import CatHerder.Types exposing (Msg(..), Model, Coord, Spot(..), Turn(..), Direction(..))
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )

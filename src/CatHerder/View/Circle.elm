@@ -1,9 +1,10 @@
-module ViewCircle exposing (spot)
+module CatHerder.View.Circle exposing (spot)
 
 import Svg exposing (Svg)
 import Svg.Attributes as Svg
 import Svg.Events as Svg
-import Types exposing (Pt, Msg)
+
+import CatHerder.Types exposing (Pt, Msg)
 
 
 spot : String -> Float -> Pt -> Maybe Msg -> Svg Msg

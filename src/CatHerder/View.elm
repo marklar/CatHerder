@@ -1,14 +1,15 @@
-module View exposing (view)
+module CatHerder.View exposing (view)
 
-import Constants
 import Dict
 import Html
 import Html.Events as Html
 import Svg
 import Svg.Attributes as Svg
-import Types exposing (Msg(..), Model, Coord, Spot(..), Pt, Turn(..))
--- import ViewCircle as Spot
-import ViewHex as Spot
+
+import CatHerder.Constants as Constants
+import CatHerder.Types exposing (Msg(..), Model, Coord, Spot(..), Pt, Turn(..))
+-- import CatHerder.View.Circle as Spot
+import CatHerder.View.Hex as Spot
 
 
 view : Model -> Html.Html Msg

@@ -1,4 +1,4 @@
-module Constants exposing
+module CatHerder.Constants exposing
     ( bluish
     , catDelayMillis
     , grayish
